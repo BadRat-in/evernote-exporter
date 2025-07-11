@@ -1,0 +1,162 @@
+{
+    "Test 1": [
+        {
+            "file": "Test 1.enex",
+            "note": "Lorem ipsum",
+            "success": true,
+            "file_path": "output_files/Test 1/Lorem ipsum/Lorem ipsum.pdf",
+            "notebook": "Test 1",
+            "file_hash": "ee7ac8084eeab08035fdcb47bfa81931"
+        },
+        {
+            "file": "Test 1.enex",
+            "note": "Multiple Images",
+            "success": true,
+            "file_path": "output_files/Test 1/Multiple Images/Multiple Images_1.png",
+            "notebook": "Test 1",
+            "file_hash": "1cbf654431027b1ec4945b9df59ca1e4"
+        },
+        {
+            "file": "Test 1.enex",
+            "note": "Multiple Images",
+            "success": true,
+            "file_path": "output_files/Test 1/Multiple Images/Multiple Images_2.png",
+            "notebook": "Test 1",
+            "file_hash": "6d45f8fd0ecc80c37853180148b64c7f"
+        },
+        {
+            "file": "Test 1.enex",
+            "note": "Multiple Images",
+            "success": true,
+            "file_path": "output_files/Test 1/Multiple Images/Multiple Images_3.png",
+            "notebook": "Test 1",
+            "file_hash": "6f890bb82d77aab0ccdfdccb7ed0cf07"
+        },
+        {
+            "file": "Test 1.enex",
+            "note": "Ramdom Image",
+            "success": true,
+            "file_path": "output_files/Test 1/Ramdom Image/Ramdom Image.jpg",
+            "notebook": "Test 1",
+            "file_hash": "4a50ff2c6c847308c947e59b0f7fdd24"
+        },
+        {
+            "file": "Test 1.enex",
+            "note": "Laptop Image 500KB",
+            "success": true,
+            "file_path": "output_files/Test 1/Laptop Image 500KB/Laptop Image 500KB.jpg",
+            "notebook": "Test 1",
+            "file_hash": "1589d7f466220b7604858b1eaabdd0d2"
+        },
+        {
+            "file": "Test 1.enex",
+            "note": "TODO List",
+            "success": true,
+            "file_path": "output_files/Test 1/TODO List/TODO List.webp",
+            "notebook": "Test 1",
+            "file_hash": "8d592103e4c173678b0377da95e4d68e"
+        },
+        {
+            "file": "Test 1.enex",
+            "note": "Laptop Image 2MB",
+            "success": true,
+            "file_path": "output_files/Test 1/Laptop Image 2MB/Laptop Image 2MB.jpg",
+            "notebook": "Test 1",
+            "file_hash": "63d148c66915aba6702a87539d37c845"
+        }
+    ],
+    "Test 2": [
+        {
+            "file": "Test 2.enex",
+            "note": "crowd-behaviors-measuring-social-sampling",
+            "success": true,
+            "file_path": "output_files/Test 2/crowd-behaviors-measuring-social-sampling/crowd-behaviors-measuring-social-sampling.webp",
+            "notebook": "Test 2",
+            "file_hash": "766df1398ba3db52ff3c5d4b9722d272"
+        },
+        {
+            "file": "Test 2.enex",
+            "note": "ex-pic01",
+            "success": true,
+            "file_path": "output_files/Test 2/ex-pic01/ex-pic01.jpg",
+            "notebook": "Test 2",
+            "file_hash": "83b397d9f7270267f6a4401ef35881bf"
+        },
+        {
+            "file": "Test 2.enex",
+            "note": "Zed Extension image",
+            "success": true,
+            "file_path": "output_files/Test 2/Zed Extension image/Zed Extension image.avif",
+            "notebook": "Test 2",
+            "file_hash": "6f03ad96c0cda35ac6f4b16adc451adb"
+        },
+        {
+            "file": "Test 2.enex",
+            "note": "Lorem ipsum PDF 500 KB",
+            "success": true,
+            "file_path": "output_files/Test 2/Lorem ipsum PDF 500 KB/Lorem ipsum PDF 500 KB.pdf",
+            "notebook": "Test 2",
+            "file_hash": "c7d354ff10c868752f1b032e5b0e55e8"
+        }
+    ],
+    "Test 3": [
+        {
+            "file": "Test 3.enex",
+            "note": "Text Doc",
+            "success": true,
+            "file_path": "EverNote Notes/Test 3/Text Doc/Text Doc.txt",
+            "notebook": "Test 3",
+            "file_hash": "68104933e4a3a405cb8b9981c9922968"
+        },
+        {
+            "file": "Test 3.enex",
+            "note": "Laptop Image 1MB",
+            "success": true,
+            "file_path": "output_files/Test 3/Laptop Image 1MB/Laptop Image 1MB.jpg",
+            "notebook": "Test 3",
+            "file_hash": "38e8bedb39d8e4338c790e9af34467e4"
+        },
+        {
+            "file": "Test 3.enex",
+            "note": "Laptop Image 100kB",
+            "success": true,
+            "file_path": "output_files/Test 3/Laptop Image 100kB/Laptop Image 100kB.jpg",
+            "notebook": "Test 3",
+            "file_hash": "5aa858befc56dee1effe7eae1c0f88bb"
+        },
+        {
+            "file": "Test 3.enex",
+            "note": "Lorem ipsum 150KB",
+            "success": true,
+            "file_path": "output_files/Test 3/Lorem ipsum 150KB/Lorem ipsum 150KB.pdf",
+            "notebook": "Test 3",
+            "file_hash": "5afaf79789a776d81ec91ccbdc9fdaba"
+        },
+        {
+            "file": "Test 3.enex",
+            "note": "premium_photo",
+            "success": true,
+            "file_path": "output_files/Test 3/premium_photo/premium_photo.jpg",
+            "notebook": "Test 3",
+            "file_hash": "6377c530d4887fb3c35ff2e52a5f6ee9"
+        }
+    ],
+    "hash": {
+        "ee7ac8084eeab08035fdcb47bfa81931": "output_files/Test 1/Lorem ipsum/Lorem ipsum.pdf",
+        "1cbf654431027b1ec4945b9df59ca1e4": "output_files/Test 1/Multiple Images/Multiple Images_1.png",
+        "6d45f8fd0ecc80c37853180148b64c7f": "output_files/Test 1/Multiple Images/Multiple Images_2.png",
+        "6f890bb82d77aab0ccdfdccb7ed0cf07": "output_files/Test 1/Multiple Images/Multiple Images_3.png",
+        "4a50ff2c6c847308c947e59b0f7fdd24": "output_files/Test 1/Ramdom Image/Ramdom Image.jpg",
+        "1589d7f466220b7604858b1eaabdd0d2": "output_files/Test 1/Laptop Image 500KB/Laptop Image 500KB.jpg",
+        "8d592103e4c173678b0377da95e4d68e": "output_files/Test 1/TODO List/TODO List.webp",
+        "63d148c66915aba6702a87539d37c845": "output_files/Test 1/Laptop Image 2MB/Laptop Image 2MB.jpg",
+        "766df1398ba3db52ff3c5d4b9722d272": "output_files/Test 2/crowd-behaviors-measuring-social-sampling/crowd-behaviors-measuring-social-sampling.webp",
+        "83b397d9f7270267f6a4401ef35881bf": "output_files/Test 2/ex-pic01/ex-pic01.jpg",
+        "6f03ad96c0cda35ac6f4b16adc451adb": "output_files/Test 2/Zed Extension image/Zed Extension image.avif",
+        "c7d354ff10c868752f1b032e5b0e55e8": "output_files/Test 2/Lorem ipsum PDF 500 KB/Lorem ipsum PDF 500 KB.pdf",
+        "38e8bedb39d8e4338c790e9af34467e4": "output_files/Test 3/Laptop Image 1MB/Laptop Image 1MB.jpg",
+        "5aa858befc56dee1effe7eae1c0f88bb": "output_files/Test 3/Laptop Image 100kB/Laptop Image 100kB.jpg",
+        "5afaf79789a776d81ec91ccbdc9fdaba": "output_files/Test 3/Lorem ipsum 150KB/Lorem ipsum 150KB.pdf",
+        "6377c530d4887fb3c35ff2e52a5f6ee9": "output_files/Test 3/premium_photo/premium_photo.jpg"
+    }
+}

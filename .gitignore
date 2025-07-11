@@ -1,0 +1,27 @@
+# Virtual environment
+.venv/
+venv/
+.env/
+env/
+
+# PyCache
+__pycache__/
+
+# Credential Files
+credentials*
+
+# Input and Output Data
+input_data/
+output_data/
+EverNote Notes/
+
+# Zed Files
+.ropeproject/
+
+# Temporary Files
+temp/
+
+# Session Files
+.session/
+*.pickle
+# Session Files
