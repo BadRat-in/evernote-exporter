@@ -25,3 +25,6 @@ temp/
 .session/
 *.pickle
 # Session Files
+
+# Log Files
+extraction_log.json
