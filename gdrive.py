@@ -4,6 +4,7 @@ import pickle
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
 
 pickel_path = Path("token.pickle")
 
@@ -14,7 +15,7 @@ def authenticate_drive():
             creds = pickle.loads(pickel_path.read_bytes())
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh()
+            creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
             creds = flow.run_local_server(port=0)
@@ -22,7 +23,7 @@ def authenticate_drive():
     return build("drive", "v3", credentials=creds)
 
 
-def create_drive_folder(service, name, parent_id=None):
+def create_drive_directory(service, name, parent_id=None):
     print("Creating folder:", name)
     file_metadata = {"name": name, "mimeType": "application/vnd.google-apps.folder"}
     if parent_id:
@@ -39,11 +40,11 @@ def upload_file(service, file_path: Path, parent_id: str):
     service.files().create(body=file_metadata, media_body=media, fields="id").execute()
 
 
-def upload_folder(service, local_path: Path, parent_id: str | None =None):
+def upload_directory(service, local_path: Path, parent_id: str | None =None):
     folder_name = local_path.name
-    folder_id = create_drive_folder(service, folder_name, parent_id)
+    folder_id = create_drive_directory(service, folder_name, parent_id)
     for item in local_path.iterdir():
         if item.is_dir():
-            upload_folder(service, item, folder_id)
+            upload_directory(service, item, folder_id)
         else:
             upload_file(service, item, folder_id)
