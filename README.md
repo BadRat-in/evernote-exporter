@@ -38,8 +38,12 @@ pip install -r requirements.txt
 ## ⚙️ Usage
 
 ```bash
-python main.py
+python main.py -h -d --output-directory {{OutputDirectory}}
 ```
+
+- `-o` OR `--output-directory`: Specify the directory where the output will be saved and the same directory name will be used in Google Drive.
+- `-d` OR `--dry-run`: Run the script without uploading any files.
+- `-h` OR `--help`: Display this help message.
 
 ---
 
