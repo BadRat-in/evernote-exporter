@@ -43,10 +43,13 @@ def process_note(note, notebook_name, file, output_dir, logs):
     if not title:
         return
 
-    note_dir = output_dir / notebook_name / title
-    note_dir.mkdir(parents=True, exist_ok=True)
-
     resources = note.findall("resource")
+    if len(resources) > 1:
+        note_dir = output_dir / notebook_name / title
+    else:
+        note_dir = output_dir / notebook_name
+
+    note_dir.mkdir(parents=True, exist_ok=True)
     if resources:
         handle_resources(resources, note_dir, title, file, notebook_name, logs)
     else:
@@ -110,6 +113,7 @@ def handle_text_content(note, note_dir, title, file, notebook_name, logs):
         "notebook": notebook_name,
         "file_hash": file_hash
     })
+
 
     # Update hash reference
     logs.setdefault("hash", {})[file_hash] = str(file_path)
@@ -227,9 +231,6 @@ if __name__ == "__main__":
     output_directory: Path = args.output_directory
     dry_run: bool = args.dry_run
 
-    if output_directory.exists() and any(output_directory.iterdir()):
-        raise ValueError(f"Output directory '{output_directory}' already exists and is not empty.")
-    else:
-        output_directory.mkdir(parents=True, exist_ok=True)
+    output_directory.mkdir(parents=True, exist_ok=True)
 
     process_files(output_directory, dry_run)
