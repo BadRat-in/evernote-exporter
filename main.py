@@ -2,14 +2,24 @@ import json
 import base64
 import argparse
 import mimetypes
-from hashlib import md5
+import urllib.parse
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
 from gdrive import upload_directory, authenticate_drive
 
-def load_extraction_log(log_file: Path) -> dict:
 
+def load_extraction_log(log_file: Path) -> dict:
+    """
+    Load the extraction log from a JSON file.
+    If the log file doesn't exist, create an empty one.
+
+    Args:
+        log_file (Path): Path to the log file.
+
+    Returns:
+        dict: Parsed log content.
+    """
     if not log_file.exists():
         log_file.write_text("{}")
         return {}
@@ -19,10 +29,29 @@ def load_extraction_log(log_file: Path) -> dict:
     except Exception:
         return {}
 
+
 def list_enex_files(input_dir: Path) -> list[Path]:
+    """
+    List all .enex files in the input directory.
+
+    Args:
+        input_dir (Path): Directory to search for .enex files.
+
+    Returns:
+        list[Path]: List of .enex files.
+    """
     return [f for f in input_dir.iterdir() if f.suffix.lower() == ".enex"]
 
+
 def process_enex_file(file: Path, output_dir: Path, logs: dict):
+    """
+    Process a single ENEX file and extract its notes.
+
+    Args:
+        file (Path): Path to the ENEX file.
+        output_dir (Path): Directory to store extracted notes.
+        logs (dict): Log dictionary to store processing metadata.
+    """
     notebook_name = file.stem
     logs[notebook_name] = []
 
@@ -38,72 +67,72 @@ def process_enex_file(file: Path, output_dir: Path, logs: dict):
     for note in notes:
         process_note(note, notebook_name, file, output_dir, logs)
 
+
 def process_note(note, notebook_name, file, output_dir, logs):
+    """
+    Process a single note: extract text and resources.
+
+    Args:
+        note (Element): XML note element.
+        notebook_name (str): Name of the notebook.
+        file (Path): Source ENEX file.
+        output_dir (Path): Target output directory.
+        logs (dict): Log dictionary.
+    """
     title = note.findtext("title")
     if not title:
         return
 
+    # Encode the title to make it safe for the filesystem
+    # title = urllib.parse.quote_plus(title).replace("+", " ")
+    title = title.replace("/", "-").replace("--", "-")
+
     resources = note.findall("resource")
-    if len(resources) > 1:
+    content_element = note.find("content")
+    text_content = None
+
+    if content_element is not None and content_element.text is not None:
+        try:
+            content_root = ET.fromstring(content_element.text.strip())
+            text_content = "\n".join(content_root.itertext()).strip()
+        except ET.ParseError:
+            pass
+
+    # If there are resources, create a subfolder for the note
+    if len(resources) > 0 and text_content:
         note_dir = output_dir / notebook_name / title
     else:
         note_dir = output_dir / notebook_name
 
     note_dir.mkdir(parents=True, exist_ok=True)
+
     if resources:
         handle_resources(resources, note_dir, title, file, notebook_name, logs)
-    else:
-        handle_text_content(note, note_dir, title, file, notebook_name, logs)
 
-def handle_text_content(note, note_dir, title, file, notebook_name, logs):
-    content_element = note.find("content")
+    handle_text_content(text_content, note_dir, title, file, notebook_name, logs)
 
-    if content_element is None or content_element.text is None:
-        logs[notebook_name].append({
-            "file": file.name,
-            "note": title,
-            "success": False,
-            "notebook": notebook_name,
-            "error": "No content/resource found"
-        })
-        print(f"[WARN] No content found for note: {title}")
-        return
 
-    try:
-        content_root = ET.fromstring(content_element.text.strip())
-    except ET.ParseError:
-        logs[notebook_name].append({
-            "file": file.name,
-            "note": title,
-            "success": False,
-            "notebook": notebook_name,
-            "error": "Content XML parsing failed"
-        })
-        return
+def handle_text_content(text_content, note_dir, title, file, notebook_name, logs):
+    """
+    Extract and save the plain text content from a note.
 
-    text = "\n".join(content_root.itertext()).strip()
+    Args:
+        text_content (Text): XML note text content.
+        note_dir (Path): Directory to save note content.
+        title (str): Title of the note.
+        file (Path): ENEX file source.
+        notebook_name (str): Name of the notebook.
+        logs (dict): Log dictionary.
+    """
 
-    if not text:
-        logs[notebook_name].append({
-            "file": file.name,
-            "note": title,
-            "success": False,
-            "notebook": notebook_name,
-            "error": "Note content is empty"
-        })
+    if not text_content:
         return
 
     file_path = note_dir / f"{title}.txt"
-    content_bytes = text.encode()
-    file_hash = md5(content_bytes).hexdigest()
+    content_bytes = text_content.encode()
 
-    if logs.get("hash", {}).get(file_hash):
-        # Skip writing if hash already exists
-        file_path = Path(logs["hash"][file_hash])
-    else:
+    if not file_path.exists():
         file_path.write_bytes(content_bytes)
-
-    file_path.write_text(text)
 
     logs[notebook_name].append({
         "file": file.name,
@@ -111,14 +140,21 @@ def handle_text_content(note, note_dir, title, file, notebook_name, logs):
         "success": True,
         "file_path": str(file_path),
         "notebook": notebook_name,
-        "file_hash": file_hash
     })
 
 
-    # Update hash reference
-    logs.setdefault("hash", {})[file_hash] = str(file_path)
-
 def handle_resources(resources, note_dir, title, file, notebook_name, logs):
+    """
+    Extract and save all resources (e.g., images, PDFs) from a note.
+
+    Args:
+        resources (list): List of resource elements.
+        note_dir (Path): Directory to save resources.
+        title (str): Note title.
+        file (Path): ENEX source file.
+        notebook_name (str): Name of the notebook.
+        logs (dict): Log dictionary.
+    """
     for idx, res in enumerate(resources):
         data_element = res.find("data")
         mime_element = res.find("mime")
@@ -137,6 +173,7 @@ def handle_resources(resources, note_dir, title, file, notebook_name, logs):
             })
             continue
 
+        # Guess file extension from MIME type
         extension = mimetypes.guess_extension(mime_type, strict=True) or ""
         file_name = f"{title}_{idx + 1}{extension}" if len(resources) > 1 else f"{title}{extension}"
         file_path = note_dir / file_name
@@ -153,11 +190,7 @@ def handle_resources(resources, note_dir, title, file, notebook_name, logs):
             })
             continue
 
-        file_hash = md5(binary_data).hexdigest()
-
-        if logs.get("hash", {}).get(file_hash):
-            file_path = Path(logs["hash"][file_hash])
-        else:
+        if not file_path.exists():
             file_path.write_bytes(binary_data)
 
         logs[notebook_name].append({
@@ -166,16 +199,17 @@ def handle_resources(resources, note_dir, title, file, notebook_name, logs):
             "success": True,
             "file_path": str(file_path),
             "notebook": notebook_name,
-            "file_hash": file_hash
         })
 
-        logs.setdefault("hash", {})[file_hash] = str(file_path)
-
-def finalize_logs(logs_json: dict, log_file: Path):
-    logs_json["hash"] = logs_json.pop("hash", {})
-    log_file.write_text(json.dumps(logs_json, indent=4))
 
 def process_files(output_directory: Path, dry_run: bool) -> None:
+    """
+    Main driver function: Processes ENEX files and optionally uploads to Google Drive.
+
+    Args:
+        output_directory (Path): Directory where files will be extracted.
+        dry_run (bool): If True, skip uploading to Drive.
+    """
     print(f"[INFO] Processing notes into: {output_directory}")
     if dry_run:
         print("[INFO] Dry run mode enabled — Google Drive syncing will be skipped.")
@@ -204,6 +238,9 @@ def process_files(output_directory: Path, dry_run: bool) -> None:
     else:
         service_account = authenticate_drive()
         upload_directory(service_account, output_directory)
+
+def finalize_logs(logs_json: dict, log_file: Path):
+    log_file.write_text(json.dumps(logs_json, indent=4))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
